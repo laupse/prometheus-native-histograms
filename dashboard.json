@@ -1,0 +1,617 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "scaleDistribution": {
+                            "type": "linear"
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 14,
+                "x": 0,
+                "y": 0
+            },
+            "id": 2,
+            "options": {
+                "calculate": false,
+                "cellGap": 1,
+                "color": {
+                    "exponent": 0.5,
+                    "fill": "dark-orange",
+                    "mode": "scheme",
+                    "reverse": false,
+                    "scale": "exponential",
+                    "scheme": "Reds",
+                    "steps": 43
+                },
+                "exemplars": {
+                    "color": "rgba(255,0,255,0.7)"
+                },
+                "filterValues": {
+                    "le": 1e-9
+                },
+                "legend": {
+                    "show": true
+                },
+                "rowsFrame": {
+                    "layout": "auto"
+                },
+                "tooltip": {
+                    "show": true,
+                    "yHistogram": false
+                },
+                "yAxis": {
+                    "axisPlacement": "left",
+                    "reverse": false
+                }
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "rate(rpc_durations_histogram_seconds_bucket[$__rate_interval])",
+                    "format": "heatmap",
+                    "instant": false,
+                    "legendFormat": "{{le}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Heatmap Old histograms",
+            "type": "heatmap"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 10,
+                "x": 14,
+                "y": 0
+            },
+            "id": 3,
+            "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.95, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval])))",
+                    "format": "heatmap",
+                    "instant": false,
+                    "legendFormat": "P95",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.75, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval])))",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "P75",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.5, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval])))",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "P50",
+                    "range": true,
+                    "refId": "C"
+                }
+            ],
+            "title": "Percentile 95 75 & 50",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 0.1
+                            },
+                            {
+                                "color": "red",
+                                "value": 0.2
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 10,
+                "x": 14,
+                "y": 6
+            },
+            "id": 7,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.95, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval]))) - 4.29)",
+                    "format": "heatmap",
+                    "instant": false,
+                    "legendFormat": "P95",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.75, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval]))) - 2.35 )",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "P75",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.5, sum by(le) (rate(rpc_durations_histogram_seconds_bucket[$__rate_interval]))) - 1)",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "Mean",
+                    "range": true,
+                    "refId": "C"
+                }
+            ],
+            "title": "Delta to real value",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "scaleDistribution": {
+                            "type": "linear"
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 14,
+                "x": 0,
+                "y": 12
+            },
+            "id": 5,
+            "interval": "30s",
+            "options": {
+                "calculate": false,
+                "cellGap": 1,
+                "color": {
+                    "exponent": 0.5,
+                    "fill": "dark-orange",
+                    "mode": "scheme",
+                    "reverse": false,
+                    "scale": "exponential",
+                    "scheme": "Oranges",
+                    "steps": 64
+                },
+                "exemplars": {
+                    "color": "rgba(255,0,255,0.7)"
+                },
+                "filterValues": {
+                    "le": 1e-9
+                },
+                "legend": {
+                    "show": true
+                },
+                "rowsFrame": {
+                    "layout": "auto"
+                },
+                "tooltip": {
+                    "show": true,
+                    "yHistogram": false
+                },
+                "yAxis": {
+                    "axisPlacement": "left",
+                    "reverse": false
+                }
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "rate(rpc_durations_native_histogram_seconds[30s])",
+                    "format": "heatmap",
+                    "instant": false,
+                    "interval": "",
+                    "legendFormat": "__auto",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Heatmap Old histograms",
+            "type": "heatmap"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 10,
+                "x": 14,
+                "y": 12
+            },
+            "id": 6,
+            "interval": "30s",
+            "options": {
+                "colorMode": "none",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.95, rate(rpc_durations_native_histogram_seconds[$__rate_interval]))",
+                    "format": "heatmap",
+                    "instant": true,
+                    "legendFormat": "P95",
+                    "range": false,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.75, rate(rpc_durations_native_histogram_seconds[$__rate_interval]))",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": true,
+                    "legendFormat": "P75",
+                    "range": false,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "histogram_quantile(0.5, rate(rpc_durations_native_histogram_seconds[$__rate_interval]))",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": true,
+                    "legendFormat": "P50",
+                    "range": false,
+                    "refId": "C"
+                }
+            ],
+            "title": "Percentile 95 75 & 50",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "4VRbR1DVz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 0.1
+                            },
+                            {
+                                "color": "red",
+                                "value": 0.2
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 10,
+                "x": 14,
+                "y": 18
+            },
+            "id": 4,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.3.0-86743pre",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.95, (rate(rpc_durations_native_histogram_seconds_bucket[$__rate_interval]))) - 4.29)",
+                    "format": "heatmap",
+                    "instant": true,
+                    "legendFormat": "P95",
+                    "range": false,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.75, sum by(le) (rate(rpc_durations_native_histogram_seconds_bucket[$__rate_interval]))) - 2.35 )",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": true,
+                    "legendFormat": "P75",
+                    "range": false,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "4VRbR1DVz"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "abs(histogram_quantile(0.5, sum by(le) (rate(rpc_durations_native_histogram_seconds_bucket[$__rate_interval]))) - 1)",
+                    "format": "heatmap",
+                    "hide": false,
+                    "instant": true,
+                    "legendFormat": "Mean",
+                    "range": false,
+                    "refId": "C"
+                }
+            ],
+            "title": "Delta to real value",
+            "type": "stat"
+        }
+    ],
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-15m",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "New dashboard",
+    "uid": "vw4GN1DVz",
+    "version": 1,
+    "weekStart": ""
+}
