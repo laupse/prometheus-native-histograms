@@ -390,7 +390,7 @@
                     "refId": "A"
                 }
             ],
-            "title": "Heatmap Old histograms",
+            "title": "Heatmap Native histograms",
             "type": "heatmap"
         },
         {
