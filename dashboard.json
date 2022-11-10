@@ -31,7 +31,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -93,7 +93,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -111,7 +111,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -161,7 +161,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -175,7 +175,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -190,7 +190,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -209,7 +209,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -266,7 +266,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -280,7 +280,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -295,7 +295,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -314,7 +314,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -377,7 +377,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -396,7 +396,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -447,7 +447,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -461,7 +461,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -476,7 +476,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "builder",
                     "exemplar": false,
@@ -495,7 +495,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "4VRbR1DVz"
+                "uid": "prometheus"
             },
             "fieldConfig": {
                 "defaults": {
@@ -552,7 +552,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -566,7 +566,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -581,7 +581,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "4VRbR1DVz"
+                        "uid": "prometheus"
                     },
                     "editorMode": "code",
                     "exemplar": false,
@@ -610,7 +610,7 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "New dashboard",
+    "title": "Native Histogram",
     "uid": "vw4GN1DVz",
     "version": 1,
     "weekStart": ""

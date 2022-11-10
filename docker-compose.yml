@@ -1,0 +1,44 @@
+version: "3.9"
+
+networks:
+  native-histo:
+
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.40.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--enable-feature=native-histograms"
+    ports:
+      - 9090:9090
+    networks:
+      - native-histo
+
+  grafana:
+    image: grafana/grafana:9.2.4
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+      - GF_LOG_LEVEL=debug
+    volumes:
+      - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml:ro
+      - ./dashboard.json:/var/lib/grafana/dashboards/dashboard.json:ro
+    ports:
+      - 3000:3000
+    networks:
+      - native-histo
+
+  nativehisto:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - native-histo
