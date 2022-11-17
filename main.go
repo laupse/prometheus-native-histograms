@@ -19,15 +19,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	gonum "gonum.org/v1/gonum/stat/distuv"
 	"log"
 	"math"
 	"math/rand"
 	"net/http"
 	"time"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type metrics struct {
@@ -38,13 +38,9 @@ type metrics struct {
 func NewMetrics(reg prometheus.Registerer, normMean, normDomain float64) *metrics {
 	m := &metrics{
 		rpcDurationsHistogram: prometheus.NewHistogram(prometheus.HistogramOpts{
-			Name: "rpc_durations_histogram_seconds",
-			Help: "RPC latency distributions.",
-			Buckets: prometheus.LinearBuckets(
-				normMean-5*normDomain,
-				.5*normDomain,
-				20,
-			),
+			Name:    "rpc_durations_histogram_seconds",
+			Help:    "RPC latency distributions.",
+			Buckets: prometheus.LinearBuckets(10, 5, 10),
 		}),
 		rpcDurationsNativeHistogram: prometheus.NewHistogram(prometheus.HistogramOpts{
 			Name:                        "rpc_durations_native_histogram_seconds",
@@ -75,6 +71,21 @@ func main() {
 			1,
 			"The mean for the normal distribution.",
 		)
+		// expRate = flag.Float64(
+		// 	"exponential.rate",
+		// 	0.05,
+		// 	"The rate for the exponential distribution.",
+		// )
+		logNormNu = flag.Float64(
+			"lognormal.nu",
+			2,
+			"The domain for the normal distribution.",
+		)
+		logNormSigma = flag.Float64(
+			"lognormal.sigma",
+			1,
+			"The domain for the normal distribution.",
+		)
 		oscillationPeriod = flag.Duration(
 			"oscillation-period",
 			10*time.Minute,
@@ -100,9 +111,14 @@ func main() {
 		)
 	}
 
+	l := &gonum.LogNormal{
+		Mu:    *logNormNu,
+		Sigma: *logNormSigma,
+		Src:   nil,
+	}
 	go func() {
 		for {
-			v := (rand.NormFloat64() * *normDomain) + *normMean
+			v := l.Rand()
 			// m.rpcDurations.WithLabelValues("normal").Observe(v)
 			// Demonstrate exemplar support with a dummy ID. This
 			// would be something like a trace ID in a real
@@ -110,6 +126,7 @@ func main() {
 			// already know that rpcDurationsHistogram implements
 			// the ExemplarObserver interface and thus don't need to
 			// check the outcome of the type assertion.
+			fmt.Printf("%f ", v)
 			m.rpcDurationsHistogram.(prometheus.ExemplarObserver).ObserveWithExemplar(
 				v, prometheus.Labels{"dummyID": fmt.Sprint(rand.Intn(100000))},
 			)

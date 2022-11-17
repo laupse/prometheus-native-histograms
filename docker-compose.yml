@@ -35,6 +35,7 @@ services:
       - native-histo
 
   nativehisto:
+    command: [ "/go/bin/native_histograms" ]
     build:
       context: .
       dockerfile: Dockerfile
