@@ -21,7 +21,7 @@ services:
       - native-histo
 
   grafana:
-    image: grafana/grafana:9.2.4
+    image: grafana/grafana:main
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=password
       - GF_LOG_LEVEL=debug
