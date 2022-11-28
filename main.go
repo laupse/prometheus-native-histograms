@@ -1,34 +1,21 @@
-// Copyright 2015 The Prometheus Authors
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// A simple example exposing fictional RPC latencies with different types of
-// random distributions (uniform, normal, and exponential) as Prometheus
-// metrics.
 package main
 
 import (
 	"flag"
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	gonum "gonum.org/v1/gonum/stat/distuv"
 	"log"
 	"math"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	gonum "gonum.org/v1/gonum/stat/distuv"
 )
+
+var oscillationFactor func() float64
 
 type metrics struct {
 	rpcDurationsHistogram       prometheus.Histogram
@@ -40,7 +27,7 @@ func NewMetrics(reg prometheus.Registerer, normMean, normDomain float64) *metric
 		rpcDurationsHistogram: prometheus.NewHistogram(prometheus.HistogramOpts{
 			Name:    "rpc_durations_histogram_seconds",
 			Help:    "RPC latency distributions.",
-			Buckets: prometheus.LinearBuckets(10, 5, 10),
+			Buckets: prometheus.ExponentialBuckets(2, 2, 5),
 		}),
 		rpcDurationsNativeHistogram: prometheus.NewHistogram(prometheus.HistogramOpts{
 			Name:                        "rpc_durations_native_histogram_seconds",
@@ -52,6 +39,24 @@ func NewMetrics(reg prometheus.Registerer, normMean, normDomain float64) *metric
 	reg.MustRegister(m.rpcDurationsHistogram)
 	reg.MustRegister(m.rpcDurationsNativeHistogram)
 	return m
+}
+
+func observer(ls []gonum.LogNormal, m *metrics) {
+	for {
+
+		for _, l := range ls {
+			v := l.Rand()
+			m.rpcDurationsHistogram.(prometheus.ExemplarObserver).ObserveWithExemplar(
+				v, prometheus.Labels{"dummyID": fmt.Sprint(rand.Intn(100000))},
+			)
+			m.rpcDurationsNativeHistogram.(prometheus.ExemplarObserver).ObserveWithExemplar(
+				v, prometheus.Labels{"dummyID": fmt.Sprint(rand.Intn(100000))},
+			)
+		}
+		wait := time.Duration(75*oscillationFactor()) * time.Millisecond
+		fmt.Println(wait)
+		time.Sleep(wait)
+	}
 }
 
 func main() {
@@ -76,15 +81,20 @@ func main() {
 		// 	0.05,
 		// 	"The rate for the exponential distribution.",
 		// )
-		logNormNu = flag.Float64(
-			"lognormal.nu",
-			2,
-			"The domain for the normal distribution.",
-		)
-		logNormSigma = flag.Float64(
-			"lognormal.sigma",
-			1,
-			"The domain for the normal distribution.",
+		// logNormNu = flag.Float64(
+		// 	"lognormal.nu",
+		// 	2,
+		// 	"The domain for the normal distribution.",
+		// )
+		// logNormSigma = flag.Float64(
+		// 	"lognormal.sigma",
+		// 	0.20,
+		// 	"The domain for the normal distribution.",
+		// )
+		shouldOscillate = flag.Bool(
+			"should-oscilate",
+			false,
+			"",
 		)
 		oscillationPeriod = flag.Duration(
 			"oscillation-period",
@@ -105,37 +115,28 @@ func main() {
 
 	start := time.Now()
 
-	oscillationFactor := func() float64 {
-		return 2 + math.Sin(
-			math.Sin(2*math.Pi*float64(time.Since(start))/float64(*oscillationPeriod)),
-		)
+	oscillationFactor = func() float64 {
+		if *shouldOscillate {
+			return 2 + math.Sin(
+				math.Sin(2*math.Pi*float64(time.Since(start))/float64(*oscillationPeriod)),
+			)
+		}
+		return 1
 	}
 
-	l := &gonum.LogNormal{
-		Mu:    *logNormNu,
-		Sigma: *logNormSigma,
-		Src:   nil,
+	ls := []gonum.LogNormal{
+		{
+			Mu:    2.7,
+			Sigma: 0.1,
+			Src:   nil,
+		},
+		{
+			Mu:    1.6,
+			Sigma: 0.2,
+			Src:   nil,
+		},
 	}
-	go func() {
-		for {
-			v := l.Rand()
-			// m.rpcDurations.WithLabelValues("normal").Observe(v)
-			// Demonstrate exemplar support with a dummy ID. This
-			// would be something like a trace ID in a real
-			// application.  Note the necessary type assertion. We
-			// already know that rpcDurationsHistogram implements
-			// the ExemplarObserver interface and thus don't need to
-			// check the outcome of the type assertion.
-			fmt.Printf("%f ", v)
-			m.rpcDurationsHistogram.(prometheus.ExemplarObserver).ObserveWithExemplar(
-				v, prometheus.Labels{"dummyID": fmt.Sprint(rand.Intn(100000))},
-			)
-			m.rpcDurationsNativeHistogram.(prometheus.ExemplarObserver).ObserveWithExemplar(
-				v, prometheus.Labels{"dummyID": fmt.Sprint(rand.Intn(100000))},
-			)
-			time.Sleep(time.Duration(75*oscillationFactor()) * time.Millisecond)
-		}
-	}()
+	go observer(ls, m)
 
 	// Expose the registered metrics via HTTP.
 	http.Handle("/metrics", promhttp.HandlerFor(
