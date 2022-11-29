@@ -64,7 +64,7 @@
           "reverse": false,
           "scale": "exponential",
           "scheme": "Reds",
-          "steps": 43
+          "steps": 64
         },
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
@@ -285,7 +285,7 @@
           "refId": "C"
         }
       ],
-      "title": "Percentile 95 75 & 50",
+      "title": "Percentile 95 75 & 50 for old Histogram",
       "type": "stat"
     },
     {
@@ -384,7 +384,7 @@
           "refId": "C"
         }
       ],
-      "title": "Percentile 95 75 & 50",
+      "title": "Percentile 95 75 & 50 for old Histogram",
       "type": "stat"
     },
     {
@@ -485,7 +485,7 @@
           "refId": "C"
         }
       ],
-      "title": "Error from Theorical value",
+      "title": "% Percentile relative error for old Histogram",
       "type": "stat"
     },
     {
@@ -586,7 +586,7 @@
           "refId": "C"
         }
       ],
-      "title": "Percentile 95 75 & 50",
+      "title": "% Percentile relative error for Native Histogram",
       "type": "stat"
     }
   ],
@@ -604,7 +604,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Native Histogram",
-  "uid": "vw4GN1DVz",
+  "uid": "native-histogram",
   "version": 1,
   "weekStart": ""
 }

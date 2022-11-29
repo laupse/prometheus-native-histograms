@@ -3,7 +3,11 @@ FROM golang:1.19.2-alpine3.16 as build
 ENV GO111MODULE=on
 
 WORKDIR /go/src/github.com/laupse/native_histograms
-COPY . .
+COPY go.* .
+
+RUN go mod download -x
+
+COPY main.go .
 
 RUN go build -o /go/bin/native_histograms
 

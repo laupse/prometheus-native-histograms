@@ -54,7 +54,6 @@ func observer(ls []gonum.LogNormal, m *metrics) {
 			)
 		}
 		wait := time.Duration(75*oscillationFactor()) * time.Millisecond
-		fmt.Println(wait)
 		time.Sleep(wait)
 	}
 }
