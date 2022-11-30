@@ -21,10 +21,10 @@ services:
       - native-histo
 
   grafana:
-    image: grafana/grafana:main
+    image: grafana/grafana:9.3.0
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=password
-      - GF_LOG_LEVEL=debug
+      - GF_AUTH_ANONYMOUS_ENABLED=true
     volumes:
       - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
       - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml:ro
